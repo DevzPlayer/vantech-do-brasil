@@ -3,18 +3,14 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaHome, FaUsers, FaImages, FaEnvelope } from 'react-icons/fa'; // Ícones da biblioteca react-icons
+import { FaHome, FaUsers, FaImages, FaEnvelope } from 'react-icons/fa';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleScroll = () => {
-    if (window.scrollY > 50) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
+    setScrolled(window.scrollY > 50);
   };
 
   const toggleDrawer = () => {
@@ -31,8 +27,12 @@ export default function Header() {
   return (
     <header className={`fixed top-0 left-0 w-full z-50 ${scrolled ? 'bg-red-600 shadow-lg' : 'bg-transparent'} transition-all duration-300`}>
       <div className="container mx-auto flex justify-between items-center px-4 py-4">
-        {/* Logo Substituído pelo SVG */}
-        <img src="/torre2.svg" alt="Logo Torre1" className="w-24 h-auto" />
+        {/* Logo dinâmica com opacidade */}
+        <img
+          src={scrolled ? '/vantech_white_text-removebg-preview.png' : '/Vantech_QR_Atualizado1.pdf-removebg-preview.png'}
+          alt="Logo Vantech"
+          className={`w-36 max-w-none h-auto transition-all duration-300 ${scrolled ? 'opacity-80' : 'opacity-100'}`}
+        />
 
         {/* Menu Desktop */}
         <nav className="hidden md:flex space-x-6">
@@ -66,11 +66,7 @@ export default function Header() {
 
         {/* Menu Mobile */}
         <div className="md:hidden">
-          <button
-            onClick={toggleDrawer}
-            className="text-white focus:outline-none"
-          >
-            {/* Ícone de Menu Moderno */}
+          <button onClick={toggleDrawer} className="text-white focus:outline-none">
             <motion.div
               className="w-6 h-6 flex flex-col justify-between"
               animate={isDrawerOpen ? 'open' : 'closed'}
@@ -99,7 +95,6 @@ export default function Header() {
             </motion.div>
           </button>
 
-          {/* Drawer Menu com Animações */}
           <AnimatePresence>
             {isDrawerOpen && (
               <motion.div
@@ -110,7 +105,7 @@ export default function Header() {
                 transition={{ duration: 0.3 }}
               >
                 <motion.div
-                  className="bg-red-900 w-2/3 h-full p-6 flex flex-col justify-between"
+                  className="bg-red-900 w-2/3 h-full p-6 flex flex-col justify-between items-center"
                   initial={{ x: '100%' }}
                   animate={{ x: 0 }}
                   exit={{ x: '100%' }}
@@ -118,11 +113,12 @@ export default function Header() {
                 >
                   <button
                     onClick={toggleDrawer}
-                    className="text-white text-3xl mb-8 hover:text-red-300 transition-colors"
+                    className="text-white text-3xl mb-8 hover:text-red-300 transition-colors self-end"
                   >
                     ×
                   </button>
-                  <ul className="space-y-6">
+
+                  <ul className="space-y-6 w-full">
                     <li className="flex items-center space-x-3">
                       <FaHome className="text-white text-xl" />
                       <Link href="/" className="text-white text-lg font-medium hover:text-red-300 transition-colors" onClick={toggleDrawer}>
@@ -149,9 +145,13 @@ export default function Header() {
                     </li>
                   </ul>
 
-                  {/* Logo da Vantech */}
-                  <div className="mt-auto">
-                    <img src="/torre2.svg" alt="Logo Vantech" className="w-24 h-auto mx-auto" />
+                  {/* Logo da Vantech ampliada no drawer */}
+                  <div className="mt-auto mb-6">
+                    <img
+                      src="/torre2.svg"
+                      alt="Logo Vantech"
+                      className="w-48 max-w-none h-auto mx-auto"
+                    />
                   </div>
                 </motion.div>
               </motion.div>
